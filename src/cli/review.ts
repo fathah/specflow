@@ -5,7 +5,9 @@ import { SpecFlowState } from "../core/types.js";
 export async function runReview() {
   const state = await readJson<SpecFlowState>("state.json");
   if (!state) {
-    console.log(kleur.yellow("No SpecFlow project found. Run `specflow init` first."));
+    console.log(
+      kleur.yellow("No SpecFlow project found. Run `specflow init` first."),
+    );
     return;
   }
 
@@ -36,7 +38,9 @@ export async function runReview() {
       ),
     );
   } else {
-    console.log(kleur.gray("AI session not marked complete (run `specflow ask`)."));
+    console.log(
+      kleur.gray("AI session not marked complete (run `specflow ask`)."),
+    );
   }
 
   if (open.length > 0) {
@@ -60,7 +64,7 @@ export async function runReview() {
     answered
       .slice(-10)
       .reverse()
-      .forEach((q, i) => {
+      .forEach((q) => {
         console.log(`- ${kleur.bold(q.title)}`);
         console.log(kleur.gray(`  → ${q.answer}`));
       });

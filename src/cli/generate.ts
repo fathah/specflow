@@ -1,6 +1,7 @@
 import kleur from "kleur";
 import { readJson } from "../core/state.js";
 import { generateArtifacts } from "../core/artifacts.js";
+import { withSpinner } from "../core/spinner.js";
 
 export async function runGenerate() {
   const state = await readJson("state.json");
@@ -11,6 +12,8 @@ export async function runGenerate() {
     return;
   }
 
-  await generateArtifacts(state as any);
+  await withSpinner("Generating artifacts...", () =>
+    generateArtifacts(state as any),
+  );
   console.log(kleur.green("✅ Artifacts generated in .specflow/"));
 }

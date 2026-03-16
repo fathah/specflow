@@ -22,6 +22,7 @@ import {
 } from "../core/providers.js";
 import { generateArtifacts } from "../core/artifacts.js";
 import { loadDomainQuestions } from "../core/domainQuestions.js";
+import { withSpinner } from "../core/spinner.js";
 
 export type InitOptions = {
   skipPrompts?: boolean;
@@ -225,7 +226,9 @@ export async function runInit(options: InitOptions = {}) {
   await saveProject(project);
   await saveState(state);
 
-  await generateArtifacts(state);
+  await withSpinner("Generating initial artifacts...", () =>
+    generateArtifacts(state),
+  );
 
   console.log(kleur.green("✅ SpecFlow setup complete!"));
   console.log(

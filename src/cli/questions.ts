@@ -3,6 +3,7 @@ import kleur from "kleur";
 import { readJson, saveState } from "../core/state.js";
 import { SpecFlowState } from "../core/types.js";
 import { generateArtifacts } from "../core/artifacts.js";
+import { withSpinner } from "../core/spinner.js";
 
 export async function runQuestions() {
   const state = await readJson<SpecFlowState>("state.json");
@@ -68,7 +69,9 @@ export async function runQuestions() {
     question.updatedAt = new Date().toISOString();
 
     await saveState(state);
-    await generateArtifacts(state);
+    await withSpinner("Regenerating artifacts...", () =>
+      generateArtifacts(state),
+    );
 
     console.log(kleur.green("✅ Saved your answer and regenerated artifacts."));
   }

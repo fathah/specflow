@@ -4,6 +4,7 @@ import { readJson, saveState, makeListItem } from "../core/state.js";
 import { SpecFlowState, SpecFlowConfig, StateListItem } from "../core/types.js";
 import { generateArtifacts } from "../core/artifacts.js";
 import { runLLM } from "../core/llm.js";
+import { withSpinner } from "../core/spinner.js";
 import { runQuestions } from "./questions.js";
 
 export async function runAsk() {
@@ -89,14 +90,16 @@ If you determine there are no more useful follow-up questions, respond exactly w
     let questionText: string;
 
     try {
-      const response = await runLLM(
-        config.provider,
-        config.model,
-        "Generate one follow-up question based on the context above.",
-        {
-          temperature: config.temperature,
-          systemPrompt,
-        },
+      const response = await withSpinner("Generating AI question...", () =>
+        runLLM(
+          config.provider,
+          config.model,
+          "Generate one follow-up question based on the context above.",
+          {
+            temperature: config.temperature,
+            systemPrompt,
+          },
+        ),
       );
 
       questionText = response.text.trim();
@@ -149,7 +152,9 @@ If you determine there are no more useful follow-up questions, respond exactly w
     );
 
     await saveState(state);
-    await generateArtifacts(state);
+    await withSpinner("Regenerating artifacts...", () =>
+      generateArtifacts(state),
+    );
 
     console.log(kleur.green("✅ Saved your answer and regenerated artifacts."));
 

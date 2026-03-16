@@ -1,0 +1,20 @@
+import ora, { type Ora } from "ora";
+
+export function createSpinner(text: string): Ora {
+  return ora({ text, spinner: "dots" });
+}
+
+export async function withSpinner<T>(
+  text: string,
+  fn: () => Promise<T>,
+): Promise<T> {
+  const spinner = ora({ text, spinner: "dots" }).start();
+  try {
+    const result = await fn();
+    spinner.succeed();
+    return result;
+  } catch (error) {
+    spinner.fail();
+    throw error;
+  }
+}
