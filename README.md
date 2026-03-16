@@ -1,7 +1,7 @@
 <p align="center">
     <picture>
         <source media="(prefers-color-scheme: light)" srcset="https://github.com/fathah/specflow/blob/main/assets/specflow.png">
-        <img src="https://github.com/fathah/specflow/blob/main/assets/specflow.png" alt="SpecFlow" width="300">
+        <img src="https://github.com/fathah/specflow/blob/main/assets/specflow-dark.png" alt="SpecFlow" width="300">
     </picture>
 
 </p>
