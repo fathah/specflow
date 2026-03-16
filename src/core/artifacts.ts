@@ -101,6 +101,15 @@ export function buildOpenQuestionsMd(state: SpecFlowState) {
   } else {
     for (const q of state.openQuestions as any[]) {
       lines.push(`- **${q.title}** (priority: ${q.priority ?? "unknown"})`);
+
+      if (q.answer) {
+        lines.push("");
+        lines.push("> Answer:");
+        lines.push("");
+        lines.push(`> ${q.answer.replace(/\n/g, "\n> ")}`);
+        lines.push("");
+      }
+
       if (q.aiResponse) {
         lines.push("");
         lines.push("> AI response:");

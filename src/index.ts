@@ -8,6 +8,7 @@ import { runConfig } from "./cli/config.js";
 import { runDoctor } from "./cli/doctor.js";
 import { runStatus } from "./cli/status.js";
 import { runGenerate } from "./cli/generate.js";
+import { runQuestions } from "./cli/questions.js";
 import { version } from "../package.json";
 
 // Load `.env` and common env files (root, .specflow, routes/app) so API keys can
@@ -50,6 +51,15 @@ program
   .description("Ask a new question to capture open issues")
   .action(async () => {
     await runAsk();
+  });
+
+program
+  .command("questions")
+  .description(
+    "List open templated questions and mark them as answered (supports custom templates)",
+  )
+  .action(async () => {
+    await runQuestions();
   });
 
 program

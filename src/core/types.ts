@@ -25,6 +25,9 @@ export type StateListItem = {
   status?: string;
   source?: string;
   tags?: string[];
+  aiHint?: string;
+  fullQuestion?: string;
+  answer?: string;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
   [key: string]: unknown;

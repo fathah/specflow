@@ -21,6 +21,7 @@ import {
   defaultProvider,
 } from "../core/providers.js";
 import { generateArtifacts } from "../core/artifacts.js";
+import { loadDomainQuestions } from "../core/domainQuestions.js";
 
 export type InitOptions = {
   skipPrompts?: boolean;
@@ -185,6 +186,32 @@ export async function runInit(options: InitOptions = {}) {
     rejectedScope: [],
     deferredScope: [],
   };
+
+  // Always include common questions (tech stack, database, deployment, etc.)
+  const commonQuestions = await loadDomainQuestions("common");
+  const domainQuestions = await loadDomainQuestions(domain);
+
+  for (const questionTemplate of [...commonQuestions, ...domainQuestions]) {
+    const hint =
+      typeof questionTemplate === "string"
+        ? questionTemplate
+        : (questionTemplate.aiHint ?? questionTemplate.question);
+    const fullQuestion =
+      typeof questionTemplate === "string"
+        ? questionTemplate
+        : questionTemplate.question;
+
+    state.openQuestions.push(
+      makeListItem({
+        title: fullQuestion,
+        fullQuestion,
+        aiHint: hint,
+        status: "open",
+        source: "template",
+        tags: ["domain", domain],
+      }),
+    );
+  }
 
   state.requirements.push(
     makeListItem({

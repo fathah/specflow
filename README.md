@@ -18,6 +18,7 @@ This will create a `.specflow/` folder with project intelligence artifacts.
 - `specflow status` - show current state of the project.
 - `specflow generate` - regenerate artifacts like `architecture.md`, `modules.md`, and JSON state files.
 - `specflow ask` - record a new open question and optionally generate an AI response.
+- `specflow questions` - answer templated questions (supports project/domain templates).
 - `specflow config` - show and update your AI provider/model configuration.
 - `specflow doctor` - validate the project structure and missing files.
 

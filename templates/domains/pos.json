@@ -1,0 +1,14 @@
+[
+  {
+    "question": "What terminals or devices will be used and how should they sync with the backend?",
+    "aiHint": "Describe POS device types and sync requirements"
+  },
+  {
+    "question": "How should offline/online mode work for sales and inventory updates?",
+    "aiHint": "Define offline/online behavior and inventory sync"
+  },
+  {
+    "question": "What reporting and audit capabilities are required for compliance?",
+    "aiHint": "List required reporting/audit capabilities for compliance"
+  }
+]

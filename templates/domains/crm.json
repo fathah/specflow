@@ -1,0 +1,14 @@
+[
+  {
+    "question": "What are the primary customer data points that need to be captured and stored?",
+    "aiHint": "Describe required customer data and storage model"
+  },
+  {
+    "question": "How should leads be qualified and progressed through the sales pipeline?",
+    "aiHint": "Define lead qualification and pipeline stages"
+  },
+  {
+    "question": "What integrations with email, calendars, or communication platforms are required?",
+    "aiHint": "List required integrations for communication and scheduling"
+  }
+]

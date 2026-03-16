@@ -1,0 +1,18 @@
+[
+  {
+    "question": "What primary tech stack and runtime environment will this project use?",
+    "aiHint": "Describe the tech stack, runtime, and major frameworks to be used"
+  },
+  {
+    "question": "What database(s) will be used and how should data be modeled?",
+    "aiHint": "Summarize database choice and data modeling approach"
+  },
+  {
+    "question": "How should the project be deployed (cloud provider, containers, serverless)?",
+    "aiHint": "Outline deployment strategy and infrastructure requirements"
+  },
+  {
+    "question": "What are the key non‑functional requirements (performance, scalability, security)?",
+    "aiHint": "List important non-functional requirements like performance and security"
+  }
+]

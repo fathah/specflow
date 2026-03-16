@@ -1,0 +1,14 @@
+[
+  {
+    "question": "What problem does the product solve and who is the primary user?",
+    "aiHint": "Summarize the core product problem and target user"
+  },
+  {
+    "question": "What are the key success metrics for this application?",
+    "aiHint": "List the key success metrics for the application"
+  },
+  {
+    "question": "What security and privacy considerations must be addressed?",
+    "aiHint": "Describe required security and privacy considerations"
+  }
+]

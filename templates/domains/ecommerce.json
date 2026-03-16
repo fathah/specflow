@@ -1,0 +1,14 @@
+[
+  {
+    "question": "What is the primary checkout flow and which payment methods must be supported?",
+    "aiHint": "Define the checkout/payment flow and required payment methods"
+  },
+  {
+    "question": "How should inventory and stock levels be tracked across sales channels?",
+    "aiHint": "Describe inventory tracking across multiple sales channels"
+  },
+  {
+    "question": "What level of personalization and recommendation does the product need?",
+    "aiHint": "Explain personalization and recommendations requirements"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "question": "How will students, teachers, and staff be authenticated and authorized?",
+    "aiHint": "Define authentication and authorization for students, teachers, and staff"
+  },
+  {
+    "question": "What academic structures (courses, semesters, assignments) need to be supported?",
+    "aiHint": "Describe required academic structures and relationships"
+  },
+  {
+    "question": "How should grades, attendance, and progress tracking be modeled?",
+    "aiHint": "Explain grading, attendance, and progress tracking requirements"
+  }
+]
