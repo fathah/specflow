@@ -8,7 +8,11 @@ Open-source requirement & architecture engine for AI coding agents.
 npx specflow-cli init
 ```
 
-OR
+Install Globally
+
+```bash
+npm i -g specflow-cli init
+```
 
 This will create a `.specflow/` folder with project intelligence artifacts.
 
