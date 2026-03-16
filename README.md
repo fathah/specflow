@@ -24,7 +24,7 @@ npx specflow-cli init
 Install Globally
 
 ```bash
-npm i -g specflow-cli init
+npm i -g specflow-cli
 ```
 
 This will create a `.specflow/` folder with project intelligence artifacts.
