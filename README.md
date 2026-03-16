@@ -1,7 +1,7 @@
 <p align="center">
     <picture>
         <source media="(prefers-color-scheme: light)" srcset="https://github.com/fathah/specflow/blob/main/assets/specflow.png">
-        <img src="https://github.com/fathah/specflow/blob/main/assets/specflow.png" alt="SpecFlow" width="300">
+        <img src="https://github.com/fathah/specflow/blob/main/assets/specflow-dark.png" alt="SpecFlow" width="300">
     </picture>
 
 </p>
@@ -24,7 +24,7 @@ npx specflow-cli init
 Install Globally
 
 ```bash
-npm i -g specflow-cli init
+npm i -g specflow-cli
 ```
 
 This will create a `.specflow/` folder with project intelligence artifacts.
