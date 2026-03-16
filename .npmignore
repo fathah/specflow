@@ -1,0 +1,25 @@
+# Ignore everything except what we explicitly want to publish
+
+# Keep package files
+!package.json
+!README.md
+!LICENSE
+
+# Keep source
+!src/**
+
+# Keep build output
+!dist/**
+
+# Keep docs
+!CONTRIBUTING.md
+
+# Exclude node_modules
+node_modules/
+
+# Exclude local runtime artifacts
+.specflow/
+
+# Exclude tooling + logs
+*.log
+*.log.*
