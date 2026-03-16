@@ -1,4 +1,13 @@
-**Stop vibe-coding. Start spec-coding.**
+<p align="center">
+    <picture>
+        <source media="(prefers-color-scheme: light)" srcset="https://github.com/fathah/specflow/blob/main/assets/specflow.png">
+        <img src="https://github.com/fathah/specflow/blob/main/assets/specflow.png" alt="SpecFlow" width="300">
+    </picture>
+
+</p>
+<p align="center">
+  <strong>Stop vibe-coding. Start spec-coding.</strong>
+</p>
 
 AI coding agents like Cursor, Copilot, and Claude Code are powerful — but they build what you _tell_ them, not what you _need_. Without clear requirements, you get half-baked features, missed edge cases, and endless refactoring.
 
