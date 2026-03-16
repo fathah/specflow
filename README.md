@@ -1,6 +1,10 @@
-# SpecFlow
+**Stop vibe-coding. Start spec-coding.**
 
-Open-source requirement & architecture engine for AI coding agents.
+AI coding agents like Cursor, Copilot, and Claude Code are powerful — but they build what you _tell_ them, not what you _need_. Without clear requirements, you get half-baked features, missed edge cases, and endless refactoring.
+
+SpecFlow fixes this. It's a CLI that walks you through structured requirement discovery _before_ you write a single line of code. It asks the right questions, captures decisions, and generates a `.specflow/` folder with architecture docs, module breakdowns, and project state — all designed to be fed directly into your AI coding agent as context.
+
+**Think of it as a product manager in your terminal.**
 
 ## Quick start
 
