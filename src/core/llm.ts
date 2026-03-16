@@ -19,6 +19,18 @@ function makeSafeText(text: unknown) {
   }
 }
 
+async function parseJsonResponse(
+  res: Response,
+): Promise<{ json: any; text: string }> {
+  const text = await res.text();
+  try {
+    const json = JSON.parse(text);
+    return { json, text };
+  } catch {
+    return { json: null, text };
+  }
+}
+
 export async function runLLM(
   provider: ProviderKey | string,
   model: string,
@@ -68,12 +80,18 @@ Answer:`;
       body: JSON.stringify(body),
     });
 
-    const json = await res.json();
+    const { json, text: rawText } = await parseJsonResponse(res);
     if (!res.ok) {
+      const safeBody = json ? makeSafeText(json) : rawText.slice(0, 1000);
       throw new Error(
-        `OpenAI request failed: ${res.status} ${res.statusText} - ${makeSafeText(
-          json,
-        )}`,
+        `OpenAI request failed: ${res.status} ${res.statusText} - ${safeBody}`,
+      );
+    }
+
+    if (!json) {
+      throw new Error(
+        `OpenAI response was not JSON. Raw response:
+${rawText.slice(0, 1000)}`,
       );
     }
 
@@ -106,12 +124,18 @@ Answer:`;
       body: JSON.stringify(body),
     });
 
-    const json = await res.json();
+    const { json, text: rawText } = await parseJsonResponse(res);
     if (!res.ok) {
+      const safeBody = json ? makeSafeText(json) : rawText.slice(0, 1000);
       throw new Error(
-        `OpenRouter request failed: ${res.status} ${res.statusText} - ${makeSafeText(
-          json,
-        )}`,
+        `OpenRouter request failed: ${res.status} ${res.statusText} - ${safeBody}`,
+      );
+    }
+
+    if (!json) {
+      throw new Error(
+        `OpenRouter response was not JSON. Raw response:
+${rawText.slice(0, 1000)}`,
       );
     }
 
@@ -144,12 +168,18 @@ Answer:`;
       body: JSON.stringify(body),
     });
 
-    const json = await res.json();
+    const { json, text: rawText } = await parseJsonResponse(res);
     if (!res.ok) {
+      const safeBody = json ? makeSafeText(json) : rawText.slice(0, 1000);
       throw new Error(
-        `Anthropic request failed: ${res.status} ${res.statusText} - ${makeSafeText(
-          json,
-        )}`,
+        `Anthropic request failed: ${res.status} ${res.statusText} - ${safeBody}`,
+      );
+    }
+
+    if (!json) {
+      throw new Error(
+        `Anthropic response was not JSON. Raw response:
+${rawText.slice(0, 1000)}`,
       );
     }
 
@@ -176,12 +206,18 @@ Answer:`;
       body: JSON.stringify(body),
     });
 
-    const json = await res.json();
+    const { json, text: rawText } = await parseJsonResponse(res);
     if (!res.ok) {
+      const safeBody = json ? makeSafeText(json) : rawText.slice(0, 1000);
       throw new Error(
-        `Ollama request failed: ${res.status} ${res.statusText} - ${makeSafeText(
-          json,
-        )}`,
+        `Ollama request failed: ${res.status} ${res.statusText} - ${safeBody}`,
+      );
+    }
+
+    if (!json) {
+      throw new Error(
+        `Ollama response was not JSON. Raw response:
+${rawText.slice(0, 1000)}`,
       );
     }
 
@@ -218,12 +254,18 @@ Answer:`;
       body: JSON.stringify(body),
     });
 
-    const json = await res.json();
+    const { json, text: rawText } = await parseJsonResponse(res);
     if (!res.ok) {
+      const safeBody = json ? makeSafeText(json) : rawText.slice(0, 1000);
       throw new Error(
-        `Gemini request failed: ${res.status} ${res.statusText} - ${makeSafeText(
-          json,
-        )}`,
+        `Gemini request failed: ${res.status} ${res.statusText} - ${safeBody}`,
+      );
+    }
+
+    if (!json) {
+      throw new Error(
+        `Gemini response was not JSON. Raw response:
+${rawText.slice(0, 1000)}`,
       );
     }
 

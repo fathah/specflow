@@ -10,7 +10,6 @@ npx specflow-cli init
 
 OR
 
-
 This will create a `.specflow/` folder with project intelligence artifacts.
 
 ## Commands
