@@ -22,45 +22,54 @@ export async function runQuestions() {
     return;
   }
 
-  const choices = openQuestions.map((q, idx) => ({
-    name: `${(q.fullQuestion ?? q.title).trim()} ${kleur.gray(`(${q.source ?? ""})`)}`.trim(),
-    value: idx,
-  }));
+  console.log(
+    kleur.bold(
+      "Answer the following questions to give the AI a better overall view. You can stop anytime by typing 'exit'.",
+    ),
+  );
 
-  const { selectedIndex } = await inquirer.prompt<{ selectedIndex: number }>([
-    {
-      type: "list",
-      name: "selectedIndex",
-      message: "Select a question to answer:",
-      choices,
-    },
-  ]);
+  for (const question of openQuestions) {
+    const promptText = question.fullQuestion ?? question.title;
 
-  const question = openQuestions[selectedIndex];
-  const { answer } = await inquirer.prompt<{ answer: string }>([
-    {
-      type: "input",
-      name: "answer",
-      message: `Answer for: ${question.fullQuestion ?? question.title}`,
-      validate: (value: string) => (value ? true : "Please enter an answer."),
-    },
-  ]);
+    const { answer } = await inquirer.prompt<{ answer: string }>([
+      {
+        type: "input",
+        name: "answer",
+        message: `Answer for: ${promptText}`,
+        prefix: "",
+        transformer: (input: string) => input,
+        validate: (value: string) =>
+          value && value.trim().toLowerCase() !== "exit"
+            ? true
+            : "Please enter an answer or type 'exit' to stop.",
+      },
+    ]);
 
-  // Once answered, we only need a short hint (idea) for the AI.
-  const hint = question.aiHint ?? question.fullQuestion ?? question.title;
-  question.title = hint;
-  question.aiHint = hint;
+    if (answer.trim().toLowerCase() === "exit") {
+      console.log(
+        kleur.yellow(
+          "Stopping question flow. You can continue later with `specflow questions`.",
+        ),
+      );
+      break;
+    }
 
-  // Clean up the large full question text from disk storage.
-  delete question.fullQuestion;
-  delete question.description;
+    // Once answered, keep only a short hint for the AI.
+    const hint = question.aiHint ?? question.fullQuestion ?? question.title;
+    question.title = hint;
+    question.aiHint = hint;
 
-  question.answer = answer;
-  question.status = "answered";
-  question.updatedAt = new Date().toISOString();
+    // Clean up full question text storage.
+    delete question.fullQuestion;
+    delete question.description;
 
-  await saveState(state);
-  await generateArtifacts(state);
+    question.answer = answer;
+    question.status = "answered";
+    question.updatedAt = new Date().toISOString();
 
-  console.log(kleur.green("✅ Saved your answer and regenerated artifacts."));
+    await saveState(state);
+    await generateArtifacts(state);
+
+    console.log(kleur.green("✅ Saved your answer and regenerated artifacts."));
+  }
 }

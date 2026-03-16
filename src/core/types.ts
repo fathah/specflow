@@ -41,4 +41,7 @@ export type SpecFlowState = {
   openQuestions: StateListItem[];
   rejectedScope: StateListItem[];
   deferredScope: StateListItem[];
+  aiQuestionSession?: {
+    completedAt?: Timestamp;
+  };
 };

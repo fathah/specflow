@@ -3,11 +3,14 @@ import { ProviderKey } from "./providers.js";
 export type LLMOptions = {
   temperature?: number;
   maxTokens?: number;
+  reasoning?: boolean;
+  systemPrompt?: string;
 };
 
 export type LLMResponse = {
   text: string;
   raw: unknown;
+  reasoningDetails?: unknown;
 };
 
 function makeSafeText(text: unknown) {
@@ -48,12 +51,14 @@ export async function runLLM(
     };
   }
 
-  const messagePrompt = `You are an AI assistant that helps developers refine requirements and answer open questions.
+  const systemPrompt =
+    options.systemPrompt ??
+    `You are an AI assistant that helps developers refine requirements and answer open questions.`;
 
-Question:
-${prompt}
-
-Answer:`;
+  const messages = [
+    { role: "system", content: systemPrompt },
+    { role: "user", content: prompt },
+  ];
 
   if (provider === "openai") {
     const apiKey = process.env.OPENAI_API_KEY;
@@ -66,7 +71,7 @@ Answer:`;
     const url = "https://api.openai.com/v1/chat/completions";
     const body = {
       model,
-      messages: [{ role: "user", content: messagePrompt }],
+      messages,
       temperature,
       max_tokens: maxTokens,
     };
@@ -107,12 +112,13 @@ ${rawText.slice(0, 1000)}`,
       );
     }
 
-    const url = "https://openrouter.ai/v1/chat/completions";
+    const url = "https://openrouter.ai/api/v1/chat/completions";
     const body = {
       model,
-      messages: [{ role: "user", content: messagePrompt }],
+      messages,
       temperature,
       max_tokens: maxTokens,
+      reasoning: { enabled: options.reasoning ?? true },
     };
 
     const res = await fetch(url, {
@@ -139,8 +145,11 @@ ${rawText.slice(0, 1000)}`,
       );
     }
 
-    const text = (json.choices?.[0]?.message?.content as string) ?? "";
-    return { text, raw: json };
+    const message = json.choices?.[0]?.message ?? {};
+    const text = (message?.content as string) ?? "";
+    const reasoningDetails = (message as any)?.reasoning_details;
+
+    return { text, raw: json, reasoningDetails };
   }
 
   if (provider === "anthropic") {
@@ -154,7 +163,7 @@ ${rawText.slice(0, 1000)}`,
     const url = "https://api.anthropic.com/v1/chat/completions";
     const body = {
       model,
-      messages: [{ role: "user", content: messagePrompt }],
+      messages,
       temperature,
       max_tokens: maxTokens,
     };
@@ -193,7 +202,7 @@ ${rawText.slice(0, 1000)}`,
 
     const body = {
       model,
-      messages: [{ role: "user", content: messagePrompt }],
+      messages,
       temperature,
       max_tokens: maxTokens,
     };
@@ -237,11 +246,12 @@ ${rawText.slice(0, 1000)}`,
       model,
     )}:generateText`;
 
+    const geminiPrompt = `${systemPrompt}\n\n${prompt}`;
+
     const body = {
       temperature,
-      // NOTE: Gemini uses a different prompt schema; send raw text for now.
       prompt: {
-        text: messagePrompt,
+        text: geminiPrompt,
       },
       maxOutputTokens: maxTokens,
     };

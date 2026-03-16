@@ -21,8 +21,8 @@ This will create a `.specflow/` folder with project intelligence artifacts.
 - `specflow init` - bootstrap a project and start requirement discovery.
 - `specflow status` - show current state of the project.
 - `specflow generate` - regenerate artifacts like `architecture.md`, `modules.md`, and JSON state files.
-- `specflow ask` - record a new open question and optionally generate an AI response.
-- `specflow questions` - answer templated questions (supports project/domain templates).
+- `specflow questions` - answer templated questions (supports project/domain templates). These should be completed before using `specflow ask`.
+- `specflow ask` - lets the AI ask follow-up questions based on the answered templates (AI will use the project summary + answered questions as context). The session ends automatically once the AI indicates it has enough information.
 - `specflow config` - show and update your AI provider/model configuration.
 - `specflow doctor` - validate the project structure and missing files.
 
