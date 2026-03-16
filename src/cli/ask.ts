@@ -80,11 +80,33 @@ export async function runAsk() {
 
   const STOP_SIGNAL = "NO_MORE_QUESTIONS";
 
-  let systemPrompt = `${projectSummary.join("\n")}
+  const TOPICS = [
+    "core features and user workflows",
+    "target users and personas",
+    "authentication and authorization",
+    "data model and storage",
+    "third-party integrations",
+    "deployment and infrastructure",
+    "non-functional requirements (performance, scalability, security)",
+    "monetization and business model",
+    "admin and back-office needs",
+  ];
 
-You are an AI assistant that asks a single focused follow-up question at a time to help clarify the project requirements. Only ask one question per turn, and keep questions specific and actionable.
+  const buildSystemPrompt = (summary: string[]) => `${summary.join("\n")}
 
-If you determine there are no more useful follow-up questions, respond exactly with: ${STOP_SIGNAL}`;
+You are a senior requirements analyst helping clarify a software project. Ask ONE question per turn.
+
+Strategy:
+- First, cover BREADTH: make sure every major area of the project is understood at a high level before going deep on any single topic.
+- The key areas to cover are: ${TOPICS.join(", ")}.
+- Look at the already-answered questions. Identify which areas are NOT yet covered and ask about those first.
+- Only drill deeper into a topic once all major areas have at least a high-level answer.
+- Never re-ask something that has already been answered. Never ask a narrow follow-up if broad areas remain unexplored.
+- Keep questions concise and actionable.
+
+If all major areas are sufficiently covered and no more useful questions remain, respond exactly with: ${STOP_SIGNAL}`;
+
+  let systemPrompt = buildSystemPrompt(projectSummary);
 
   while (true) {
     let questionText: string;
@@ -94,7 +116,7 @@ If you determine there are no more useful follow-up questions, respond exactly w
         runLLM(
           config.provider,
           config.model,
-          "Generate one follow-up question based on the context above.",
+          "Based on the project context and your strategy, generate the next most important question.",
           {
             temperature: config.temperature,
             systemPrompt,
@@ -162,11 +184,7 @@ If you determine there are no more useful follow-up questions, respond exactly w
     projectSummary.push(`- Q: ${questionText}`);
     projectSummary.push(`  A: ${answer}`);
 
-    systemPrompt = `${projectSummary.join("\n")}
-
-You are an AI assistant that asks a single focused follow-up question at a time to help clarify the project requirements. Only ask one question per turn, and keep questions specific and actionable.
-
-If you determine there are no more useful follow-up questions, respond exactly with: ${STOP_SIGNAL}`;
+    systemPrompt = buildSystemPrompt(projectSummary);
   }
 
   // At the end of the session, show a mini log.
