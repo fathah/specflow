@@ -9,8 +9,10 @@ export type SpecFlowProject = {
   updatedAt: Timestamp;
 };
 
+import { ProviderKey } from "./providers.js";
+
 export type SpecFlowConfig = {
-  provider: string;
+  provider: ProviderKey | string;
   model: string;
   temperature: number;
   outputFormats: Array<"json" | "md">;

@@ -15,6 +15,11 @@ import {
   SpecFlowProject,
   SpecFlowState,
 } from "../core/types.js";
+import {
+  providerOptions,
+  providerModels,
+  defaultProvider,
+} from "../core/providers.js";
 import { generateArtifacts } from "../core/artifacts.js";
 
 export type InitOptions = {
@@ -22,8 +27,8 @@ export type InitOptions = {
 };
 
 const DEFAULT_CONFIG: SpecFlowConfig = {
-  provider: "local",
-  model: "none",
+  provider: defaultProvider,
+  model: providerModels[defaultProvider][0],
   temperature: 0.2,
   outputFormats: ["json", "md"],
 };
@@ -68,11 +73,17 @@ export async function runInit(options: InitOptions = {}) {
     projectName = path.basename(process.cwd());
     description = `A project scaffolded by SpecFlow in ${projectName}`;
     domain = detectDomainFromIdea(projectName);
+
+    // Save default config when running non-interactively.
+    await saveConfig(DEFAULT_CONFIG);
   } else {
     type InitAnswers = {
       projectName: string;
       description: string;
       domain: string;
+      provider: import("../core/providers.js").ProviderKey;
+      model: string;
+      customModel?: string;
     };
 
     const answers = await inquirer.prompt<InitAnswers>([
@@ -105,11 +116,54 @@ export async function runInit(options: InitOptions = {}) {
         ],
         default: detectDomainFromIdea(projectName),
       },
+      {
+        type: "list",
+        name: "provider",
+        message: "Which AI provider should SpecFlow use for prompts/questions?",
+        choices: providerOptions,
+        default: defaultProvider,
+      },
+      {
+        type: "list",
+        name: "model",
+        message: "Which model should SpecFlow use?",
+        choices: (answers: InitAnswers) => {
+          const list =
+            providerModels[answers.provider] ?? providerModels[defaultProvider];
+          return [
+            ...list.map((m) => ({ name: m, value: m })),
+            { name: "Other (enter custom model)", value: "__custom" },
+          ];
+        },
+        default: (answers: InitAnswers) =>
+          (providerModels[answers.provider] ??
+            providerModels[defaultProvider])[0],
+      },
+      {
+        type: "input",
+        name: "customModel",
+        message: "Enter custom model name",
+        when: (answers: InitAnswers) => answers.model === "__custom",
+        validate: (value: string) =>
+          value ? true : "Please enter a custom model name.",
+      },
     ]);
+
+    const selectedModel =
+      answers.model === "__custom" ? answers.customModel! : answers.model;
 
     projectName = answers.projectName;
     description = answers.description;
     domain = answers.domain;
+
+    // Keep config immutable; create a new config object for saving.
+    const updatedConfig: SpecFlowConfig = {
+      ...DEFAULT_CONFIG,
+      provider: answers.provider,
+      model: selectedModel,
+    };
+
+    await saveConfig(updatedConfig);
   }
 
   const now = nowIso();
@@ -141,7 +195,6 @@ export async function runInit(options: InitOptions = {}) {
     }),
   );
 
-  await saveConfig(DEFAULT_CONFIG);
   await saveProject(project);
   await saveState(state);
 

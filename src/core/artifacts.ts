@@ -99,8 +99,15 @@ export function buildOpenQuestionsMd(state: SpecFlowState) {
   if (!state.openQuestions?.length) {
     lines.push("- _No open questions yet._");
   } else {
-    for (const q of state.openQuestions) {
+    for (const q of state.openQuestions as any[]) {
       lines.push(`- **${q.title}** (priority: ${q.priority ?? "unknown"})`);
+      if (q.aiResponse) {
+        lines.push("");
+        lines.push("> AI response:");
+        lines.push("");
+        lines.push(`> ${q.aiResponse.replace(/\n/g, "\n> ")}`);
+        lines.push("");
+      }
     }
   }
   lines.push("");
